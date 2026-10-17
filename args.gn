@@ -1,0 +1,40 @@
+# Vanadium for Windows - Chromium 155.0.8059.84, x64 release build
+
+target_os = "win"
+target_cpu = "x64"
+
+is_component_build = false
+is_debug = false
+is_official_build = true
+symbol_level = 1
+
+# ---------------------------------------------------------------------------
+# Vanadium hardening that has a real counterpart on Windows x64.
+# CFI is supported on Windows x64; Vanadium enables is_cfi + use_cfi_cast.
+# ---------------------------------------------------------------------------
+is_cfi = true
+use_cfi_cast = true
+
+# ---------------------------------------------------------------------------
+# Vanadium build-time privacy config.
+# enable_reporting = false removes the reporting/crash-upload stack, matching
+# Vanadium's "no reporting" stance.
+# ---------------------------------------------------------------------------
+enable_reporting = false
+disable_fieldtrial_testing_config = true
+
+# ---------------------------------------------------------------------------
+# Vanadium ships patented codecs enabled.
+# ---------------------------------------------------------------------------
+ffmpeg_branding = "Chrome"
+proprietary_codecs = true
+
+# ---------------------------------------------------------------------------
+# No PGO profiles are available to a third-party build; keeping this at 0
+# avoids a hard requirement on downloading Google's internal profiles.
+# ---------------------------------------------------------------------------
+chrome_pgo_phase = 0
+
+# Vanadium disables VR / remoting / reporting surfaces.
+enable_vr = false
+enable_remoting = false
