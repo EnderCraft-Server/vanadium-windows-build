@@ -7,8 +7,10 @@
 #
 #   android-only  every touched path is Android-scoped          -> skip
 #   scaffolding   touches vanadium/** (tree created by patches) -> skip
-#   build-file    touches BUILD.gn / *.gni / DEPS               -> defer, review by hand
+#   resources     touches .grd/.grdp/.xml or build files         -> defer, review by hand
 #   port          runtime source only                           -> apply
+#
+# Exception: the branding patches 0001-0003 are always applied (see below).
 param(
   [string]$Src    = "D:\chromium\src",
   [string]$PDir   = "D:\dsh_Workspaces\Daily\Vanadium\Vanadium-155.0.8059.84.0\patches",
@@ -19,8 +21,16 @@ param(
 $ErrorActionPreference = 'Continue'
 Set-Location $Src
 
-function Get-Category($paths) {
+# Branding patches. 0001-0003 edit .grd/.grdp string resources and are pure
+# "Chromium" -> "Vanadium" text replacement with zero build-file changes, so they
+# are wanted even though they would otherwise hit the resource filter below.
+# 0004/0005 are Android APK assets and WebView branding; they touch only Android
+# paths and never reach a Windows build.
+$BrandingPatches = @('0001', '0002', '0003')
+
+function Get-Category($paths, $patchName) {
   if ($paths.Count -eq 0) { return 'empty' }
+  if ($BrandingPatches -contains ($patchName -split '-')[0]) { return 'port' }
   if (@($paths | Where-Object { $_ -match '(^|/)vanadium/' }).Count -gt 0) { return 'scaffolding' }
   $nonAndroid = @($paths | Where-Object { $_ -notmatch 'android' })
   if ($nonAndroid.Count -eq 0) { return 'android-only' }
@@ -34,7 +44,7 @@ $rows = New-Object System.Collections.ArrayList
 foreach ($f in (Get-ChildItem $PDir -Filter *.patch | Sort-Object Name)) {
   $text  = Get-Content $f.FullName -Raw
   $paths = @([regex]::Matches($text, 'diff --git a/([^ ]+)') | ForEach-Object { $_.Groups[1].Value })
-  $cat   = Get-Category $paths
+  $cat   = Get-Category $paths $f.Name
 
   if ($cat -ne 'port') {
     [void]$rows.Add([pscustomobject]@{ name=$f.Name; category=$cat; status='skipped'; detail='' })
