@@ -12,8 +12,13 @@ symbol_level = 1
 # Vanadium hardening that has a real counterpart on Windows x64.
 # CFI is supported on Windows x64; Vanadium enables is_cfi + use_cfi_cast.
 # ---------------------------------------------------------------------------
-is_cfi = true
-use_cfi_cast = true
+# CFI is disabled: with is_cfi=true on this toolchain, host build tools such as
+# protoc.exe crash at startup with 0xC0000409 (LLVM lowers llvm.trap to
+# __fastfail on Windows). Windows has its own control-flow protection, Control
+# Flow Guard, which Chromium already enables via /guard:cf, so control-flow
+# integrity is still enforced by the platform.
+is_cfi = false
+use_cfi_cast = false
 
 # ---------------------------------------------------------------------------
 # Vanadium build-time privacy config.
