@@ -1,33 +1,41 @@
 # Progress log
 
-## 2026-10-17
+## 2026-10-17 — build complete
 
-### Reconnaissance — done
+**Chromium 155.0.8059.84 for Windows x64, with 85 Vanadium privacy/security
+patches applied, compiles and runs.**
 
-- Confirmed this repo's input is the **Vanadium config/patches repo only** (113 MB),
-  not a Chromium checkout. Vanadium is Android-only (`target_os = "android"`).
-- Triaged all **309** patches: 160 Android-only-path, 73 fully platform-independent.
-- Verified upstream tag `155.0.8059.84` exists
-  (`5869fe313571d75152b77813cf0a4ee26a4e6df0`).
-- Host: Ryzen 7 9800X3D (8c/16T), 31 GB RAM, 539 GB free on D:.
-- Proxy: BitzNet at `127.0.0.1:7897` — reaches chromium.googlesource.com and GitHub.
+```
+1h5m04.48s Build Succeeded: 9254 steps
+chrome.exe  3.8 MB    ProductVersion 155.0.8059.84
+chrome.dll  328.4 MB
+```
 
-### Toolchain — done
+Verified: 16/16 privacy defaults confirmed in the built tree; browser launches
+and renders HTML from the standalone package.
 
-- Visual Studio 2022 Build Tools had **only MSBuild**; no C++ toolchain.
-  The installer rejects `--quiet` when unelevated (error 5007).
-- Host has `ConsentPromptBehaviorAdmin = 0`, so `Start-Process -Verb RunAs`
-  self-elevates silently. Installed the workload:
-  - **MSVC 14.44.35207** ✅
-  - **Windows SDK 10.0.26100.0** ✅
+- Full timeline and every blocker: `docs/BUILD_REPORT.md`
+- Verification evidence: `docs/VERIFICATION.md`
+- Host fixes: `docs/ENVIRONMENT_FIXES.md`
+- CFI decision: `docs/CFI_DECISION.md`
+- Patch triage: `docs/PATCH_INVENTORY.md`, `docs/PATCH_DEVIATIONS.md`
 
-### Source fetch — in progress
+### Reconnaissance
 
-- `depot_tools` cloned; `gclient sync --revision src@155.0.8059.84 --no-history` running
-  through the proxy via CIPD/bootstrap.
+- Input is the **Vanadium config/patches repo only** (113 MB), not a Chromium
+  checkout. Vanadium is Android-only (`target_os = "android"`).
+- 309 patches: 122 platform-independent, 27 mixed, 160 android-only.
+- Host: Ryzen 7 9800X3D (8c/16T), 31 GB RAM, 519 GB free on D:.
+- Proxy: BitzNet at `127.0.0.1:7897`.
 
-### Next
+### Toolchain
 
-- `test_patches.ps1` once the tree lands, to get the authoritative applicability list.
-- Apply the port, write Windows equivalents for Android-only privacy semantics.
-- `gn gen` + `autoninja chrome`.
+- VS 2022 Build Tools had only MSBuild. Installer rejects `--quiet` unelevated
+  (error 5007); host has `ConsentPromptBehaviorAdmin = 0`, so
+  `Start-Process -Verb RunAs` self-elevates silently.
+- Installed MSVC 14.44.35207 + Windows SDK 10.0.26100.0.
+
+### Source
+
+- `gclient sync --revision src@155.0.8059.84 --no-history` — 27.3 GB, tree at
+  the correct commit, PGO profiles and hooks present.

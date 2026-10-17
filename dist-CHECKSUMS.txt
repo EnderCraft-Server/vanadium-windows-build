@@ -1,0 +1,23 @@
+# Build artifact checksums
+
+Vanadium for Windows
+Chromium 155.0.8059.84 x64, official-style release build.
+Upstream commit 5869fe313571d75152b77813cf0a4ee26a4e6df0
+
+## Distribution archive
+
+File   : vanadium-windows-155.0.8059.84-x64.zip
+Size   : 212.7 MB (223,462,xxx bytes compressed; 539.7 MB extracted)
+SHA256 : 52C6FBF3FA1B478BA6993AD41A626F4CF6CEB153880C1217638589557E47A618
+
+## Key binaries
+
+chrome.dll  SHA256 : 62353314A438CBE8E3B8DB7536292F64BF0B8B94E28F1F07E429C9C8BE0B7D30  (328.4 MB)
+chrome.exe  Version: 155.0.8059.84
+
+## Verify
+
+    Get-FileHash .\vanadium-windows-155.0.8059.84-x64.zip -Algorithm SHA256
+
+The archive exceeds GitHub's 100 MB per-file limit and is therefore not committed;
+it belongs on a Release. See docs/VERIFICATION.md for functional evidence.
