@@ -1,5 +1,9 @@
 src/
 out/
 *.log
-*.csv
 elevtest.txt
+
+# Build reports are generated into D:\chromium, but the per-patch manifests
+# under patches/ are checked in for reproducibility.
+/*.csv
+!/patches/*.csv
