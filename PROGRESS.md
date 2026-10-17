@@ -1,24 +1,38 @@
 # Progress log
 
-## 2026-10-17 — build complete
+## 2026-10-17 — released
 
-**Chromium 155.0.8059.84 for Windows x64, with 85 Vanadium privacy/security
-patches applied, compiles and runs.**
+**Vanadium 155.0.8059.84 for Windows x64 is built, branded, and published.**
+
+Release: https://github.com/EnderCraft-Server/vanadium-windows-build/releases/tag/v155.0.8059.84
 
 ```
-1h5m04.48s Build Succeeded: 9254 steps
-chrome.exe  3.8 MB    ProductVersion 155.0.8059.84
+1h5m04.48s Build Succeeded: 9254 steps        (privacy port)
+      5m48.92s Build Succeeded:  538 steps    (branding rebuild)
+
+chrome.exe  3.8 MB    ProductName: Vanadium    ProductVersion 155.0.8059.84
 chrome.dll  328.4 MB
+dist        537.5 MB extracted / 212.7 MB zipped
 ```
 
-Verified: 16/16 privacy defaults confirmed in the built tree; browser launches
-and renders HTML from the standalone package.
+### Verified
 
-- Full timeline and every blocker: `docs/BUILD_REPORT.md`
-- Verification evidence: `docs/VERIFICATION.md`
-- Host fixes: `docs/ENVIRONMENT_FIXES.md`
-- CFI decision: `docs/CFI_DECISION.md`
-- Patch triage: `docs/PATCH_INVENTORY.md`, `docs/PATCH_DEVIATIONS.md`
+- 16/16 privacy defaults confirmed in the source tree that produced the binaries
+- Runs standalone; renders HTML via `--dump-dom`
+- Window title: `about:blank - Vanadium`
+- PE version resource: ProductName / FileDescription / CompanyName all `Vanadium`
+
+### Docs
+
+| File | Contents |
+|---|---|
+| `docs/BUILD_REPORT.md` | full timeline, all 8 blockers and their real causes |
+| `docs/VERIFICATION.md` | functional + 16 privacy checks |
+| `docs/BRANDING.md` | why it was Chromium, what rebranding took |
+| `docs/CFI_DECISION.md` | why Clang CFI is off, why Windows CFG covers it |
+| `docs/ENVIRONMENT_FIXES.md` | vs2022_install, SDK retarget, dbghelp fallback |
+| `docs/PATCH_DEVIATIONS.md` | patches reverted and skipped, with reasons |
+| `docs/PATCH_INVENTORY.md` | classification of all 309 patches |
 
 ### Reconnaissance
 
